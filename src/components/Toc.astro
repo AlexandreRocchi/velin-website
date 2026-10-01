@@ -1,0 +1,49 @@
+---
+/** Sommaire latéral qui suit la lecture (section courante et section parente surlignées). */
+interface Item { id: string; label: string; sub?: boolean }
+interface Props { items: Item[]; title?: string }
+const { items, title = "Sommaire" } = Astro.props;
+---
+<nav class="toc" aria-label={title}>
+  <h2>{title}</h2>
+  <ol>
+    {items.map((t) => <li class:list={{ sub: t.sub }}><a href={`#${t.id}`}>{t.label}</a></li>)}
+  </ol>
+</nav>
+
+<script>
+  // Sommaire qui suit la lecture : la section visible est surlignée, ainsi que sa section parente.
+  const links = [...document.querySelectorAll<HTMLAnchorElement>(".toc a[href^='#']")];
+  const targets = links
+    .map((a) => ({ a, el: document.getElementById(a.hash.slice(1)) }))
+    .filter((t): t is { a: HTMLAnchorElement; el: HTMLElement } => !!t.el);
+  const tocBox = document.querySelector<HTMLElement>(".toc");
+  let ticking = false;
+  function updateToc() {
+    ticking = false;
+    const line = 140; // sous l'en-tête fixe
+    let current = targets[0];
+    for (const t of targets) if (t.el.getBoundingClientRect().top <= line) current = t;
+    // En bas de page, la dernière section est la section courante.
+    if (window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 4) current = targets[targets.length - 1];
+    const i = targets.indexOf(current);
+    const parent = current.a.parentElement?.classList.contains("sub")
+      ? targets.slice(0, i).reverse().find((t) => !t.a.parentElement?.classList.contains("sub"))
+      : undefined;
+    for (const t of targets) {
+      t.a.classList.toggle("active", t === current);
+      t.a.classList.toggle("active-parent", t === parent);
+      if (t === current) t.a.setAttribute("aria-current", "location");
+      else t.a.removeAttribute("aria-current");
+    }
+    // Garde le lien actif visible si le sommaire défile lui-même.
+    if (tocBox && tocBox.scrollHeight > tocBox.clientHeight) {
+      const r = current.a.getBoundingClientRect(), b = tocBox.getBoundingClientRect();
+      if (r.top < b.top + 40 || r.bottom > b.bottom - 40) tocBox.scrollTop += r.top - b.top - b.height / 2;
+    }
+  }
+  const onScroll = () => { if (!ticking) { ticking = true; requestAnimationFrame(updateToc); } };
+  addEventListener("scroll", onScroll, { passive: true });
+  addEventListener("resize", onScroll);
+  updateToc();
+</script>

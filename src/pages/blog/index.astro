@@ -1,0 +1,40 @@
+---
+import Base from "../../layouts/Base.astro";
+import { getPosts, formatDate, readingTime } from "../../lib/posts";
+import { url } from "../../lib/site";
+
+const posts = await getPosts();
+---
+<Base title="Blog" description="Le blog de Vélin : avancement du projet, politiques de sécurité, référentiels et gouvernance SSI.">
+  <section class="page-head" style="padding-bottom:72px">
+    <div class="wrap">
+      <span class="eyebrow">Blog</span>
+      <h1>Notes en marge</h1>
+      <p class="lead">Avancement du projet, rédaction de PSSI, référentiels et gouvernance de la sécurité.</p>
+    </div>
+  </section>
+  <section class="section">
+    <div class="wrap">
+      {posts.length === 0 ? (
+        <p class="muted">Aucun article pour le moment. La plume est trempée dans l'encre.</p>
+      ) : (
+        <div class="posts">
+          {posts.map((p) => (
+            <a class="post-card" href={url(`blog/${p.id}`)}>
+              <div class="post-meta">
+                <time datetime={p.data.date.toISOString()}>{formatDate(p.data.date)}</time>
+                <span>· {readingTime(p.body)} min de lecture</span>
+                {p.data.draft && <span class="tag">Brouillon</span>}
+              </div>
+              <h2>{p.data.title}</h2>
+              <p>{p.data.description}</p>
+              {p.data.tags.length > 0 && <div class="post-meta">{p.data.tags.map((t) => <span class="tag">{t}</span>)}</div>}
+              <span class="read-more">Lire l'article →</span>
+            </a>
+          ))}
+        </div>
+      )}
+      <p class="muted" style="margin-top:32px">Suivre le blog : <a href={url("rss.xml")}>flux RSS</a>.</p>
+    </div>
+  </section>
+</Base>

@@ -1,0 +1,16 @@
+---
+import Base from "../layouts/Base.astro";
+import { url } from "../lib/site";
+---
+<Base title="Page introuvable">
+  <section class="page-head" style="padding-bottom:96px">
+    <div class="wrap">
+      <span class="eyebrow">Erreur 404</span>
+      <h1>Cette page n'a jamais été rédigée.</h1>
+      <p class="lead">Aucune règle ne la prévoit, et aucun visa ne l'a approuvée. Dérogation accordée : retour à l'accueil.</p>
+      <div class="btn-row" style="justify-content:center;margin-top:28px">
+        <a class="btn btn-light" href={url()}>Retour à l'accueil</a>
+      </div>
+    </div>
+  </section>
+</Base>

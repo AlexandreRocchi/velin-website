@@ -1,0 +1,86 @@
+---
+import Base from "../layouts/Base.astro";
+import { SITE } from "../lib/site";
+
+const updated = "1er octobre 2026";
+---
+<Base title="Mentions légales" description="Mentions légales, hébergement, données personnelles et propriété intellectuelle du site de Vélin.">
+  <header class="article-head">
+    <div class="wrap">
+      <span class="eyebrow">Informations légales</span>
+      <h1>Mentions légales</h1>
+      <p class="lead" style="margin-bottom:0">Mise à jour : {updated}.</p>
+    </div>
+  </header>
+
+  <div class="wrap">
+    <article class="prose">
+      <h2>Éditeur du site</h2>
+      <p>
+        Ce site présente Vélin, logiciel libre de rédaction et de suivi de politiques de sécurité, en conception. Il est édité à titre
+        personnel et non professionnel par <strong>Alexandre Rocchi</strong>, directeur de la publication.
+      </p>
+      <p>
+        Contact : par le profil <a href="https://github.com/AlexandreRocchi" rel="noopener">github.com/AlexandreRocchi</a>.
+      </p>
+
+      <h2>Hébergement</h2>
+      <p>
+        <strong>GitHub, Inc.</strong> (service GitHub Pages)<br />
+        88 Colin P. Kelly Jr. Street, San Francisco, CA 94107, États-Unis<br />
+        <a href="https://github.com" rel="noopener">github.com</a>
+      </p>
+
+      <h2>Données personnelles et cookies</h2>
+      <p>Ce site est volontairement sobre, à l'image du logiciel qu'il présente :</p>
+      <ul>
+        <li><strong>aucun cookie</strong>, aucune mesure d'audience, aucun traceur publicitaire ;</li>
+        <li><strong>aucun formulaire</strong> : le site ne collecte aucune donnée saisie par les visiteurs ;</li>
+        <li><strong>aucune ressource tierce</strong> : les polices et les images sont servies par le site lui-même.</li>
+      </ul>
+      <p>
+        Comme tout hébergeur, GitHub peut enregistrer des données techniques de connexion (adresse IP
+        notamment) à des fins de sécurité et de fonctionnement du service. Ce traitement relève de GitHub,
+        décrit dans sa <a href="https://docs.github.com/fr/site-policy/privacy-policies/github-general-privacy-statement" rel="noopener">déclaration de confidentialité</a>.
+      </p>
+      <p>
+        Les liens vers GitHub (dépôt, téléchargements, issues) mènent à un site tiers soumis à ses propres
+        conditions. Pour toute question relative à vos données personnelles, vous disposez des droits prévus
+        par le RGPD et pouvez adresser une réclamation à la <a href="https://www.cnil.fr" rel="noopener">CNIL</a>.
+      </p>
+
+      <h2>Propriété intellectuelle</h2>
+      <ul>
+        <li>
+          Le logiciel <strong>Vélin</strong> sera distribué sous licence Apache-2.0, comme
+          <a href={SITE.beffroiGithub} rel="noopener">Beffroi</a>.
+        </li>
+        <li>
+          Le code de ce site est distribué sous <strong>licence MIT</strong>.
+          Les textes et le logo de Vélin appartiennent à leur auteur ; ils peuvent être
+          cités et reproduits pour présenter le projet, avec mention de la source.
+        </li>
+        <li>
+          Les guides de l'ANSSI, la PSSIE, la PGSSI-S et les textes NIS 2 cités restent la propriété de leurs
+          auteurs ; ISO 27001 et 27002 sont des normes protégées, que Vélin n'embarque pas. EBIOS est une marque
+          déposée du SGDSN.
+        </li>
+        <li>
+          Vélin n'est ni labellisé ni approuvé par l'ANSSI, et n'est affilié ni à l'ANSSI, ni au SGDSN, ni aux
+          organismes cités sur ce site. Les marques citées appartiennent à leurs titulaires.
+        </li>
+        <li>
+          Police <strong>IBM Plex</strong> sous licence SIL Open Font License ; site construit avec
+          <strong>Astro</strong> (licence MIT).
+        </li>
+      </ul>
+
+      <h2>Responsabilité</h2>
+      <p>
+        Les informations de ce site sont fournies à titre indicatif et décrivent un produit en conception :
+        les fonctionnalités présentées peuvent évoluer avant la première version. Une fois publié, Vélin sera
+        fourni « en l'état », sans garantie, dans les conditions de sa licence.
+      </p>
+    </article>
+  </div>
+</Base>

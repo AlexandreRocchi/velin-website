@@ -1,0 +1,181 @@
+---
+import Base from "../layouts/Base.astro";
+import Toc from "../components/Toc.astro";
+import { SITE } from "../lib/site";
+
+const toc = [
+  { id: "cycle", label: "Le cycle de vie d'une PSSI" },
+  { id: "demarrer", label: "1. Démarrer", sub: true },
+  { id: "rediger", label: "2. Rédiger", sub: true },
+  { id: "tracer", label: "3. Tracer", sub: true },
+  { id: "valider", label: "4. Valider", sub: true },
+  { id: "faire-vivre", label: "5. Faire vivre", sub: true },
+  { id: "diffuser", label: "6. Diffuser", sub: true },
+  { id: "beffroi", label: "Le lien avec Beffroi" },
+  { id: "referentiels", label: "Référentiels et licences" },
+  { id: "securite", label: "Sécurité et déploiement" },
+];
+
+const features = [
+  {
+    id: "demarrer", t: "Démarrer", lead: "De la page blanche à un squelette de PSSI adapté à l'organisation.",
+    items: [
+      ["Assistant de cadrage", "Un questionnaire court (taille, secteur, statut NIS 2, usage du cloud, télétravail, prestataires) génère un squelette de PSSI adapté, avec seulement les thèmes pertinents."],
+      ["Bibliothèque de référentiels", "Guide d'hygiène de l'ANSSI, PSSIE, PGSSI-S, mesures NIS 2, RGS, avec des règles types prêtes à adapter."],
+      ["Reprise de l'existant", "Import d'une PSSI Word ou ODT, découpée en règles à rattacher aux référentiels."],
+    ],
+  },
+  {
+    id: "rediger", t: "Rédiger", lead: "Une PSSI structurée plutôt qu'un long texte libre.",
+    items: [
+      ["Éditeur structuré", "La PSSI est organisée en objectifs, principes, règles et mesures, plutôt qu'en texte libre."],
+      ["Blocs réutilisables et variables", "Le nom de l'organisme, du RSSI ou du DPO est défini une fois et mis à jour partout."],
+      ["Architecture documentaire", "PSSI cadre, politiques thématiques (mots de passe, sauvegarde, nomadisme…), chartes utilisateur et administrateur, procédures, avec les liens entre elles."],
+      ["Rédaction à plusieurs", "Plusieurs analystes travaillent en même temps, chacun sur sa partie, en mode serveur."],
+    ],
+  },
+  {
+    id: "tracer", t: "Tracer", lead: "Savoir, pour chaque règle, ce qu'elle couvre et ce qu'elle traite.",
+    items: [
+      ["Matrice de couverture", "Pour chaque règle, les référentiels couverts ; pour chaque exigence, les trous éventuels."],
+      ["Déclaration d'applicabilité", "Chaque mesure est retenue ou exclue, avec sa justification. Utile pour ISO 27001 et pour l'homologation."],
+      ["Lien avec Beffroi", "Chaque règle est rattachée aux risques qu'elle traite (voir la section dédiée plus bas)."],
+    ],
+  },
+  {
+    id: "valider", t: "Valider", lead: "Qui a validé quoi, et quand : une réponse prouvable.",
+    items: [
+      ["Circuit de validation", "Rédacteur, relecteurs (RSSI, DPO, DSI) puis approbateur (direction), avec commentaires en ligne."],
+      ["Visa horodaté", "Consigné dans le journal d'audit scellé et chaîné."],
+      ["Versions x.y", "Avec comparaison lisible et synthèse automatique des modifications."],
+    ],
+  },
+  {
+    id: "faire-vivre", t: "Faire vivre", lead: "Une PSSI appliquée, suivie et revue, pas une archive.",
+    items: [
+      ["Suivi de mise en œuvre", "Chaque règle est notée appliquée, partielle ou non appliquée ; un tableau de bord synthétise l'avancement pour la direction."],
+      ["Registre des dérogations", "Demande, justification, risque accepté, date d'expiration et relance automatique."],
+      ["Cycle de revue", "Date de révision annuelle, rappels, et alertes quand un référentiel ou une analyse Beffroi évolue."],
+      ["Accusé de lecture des chartes", "En mode serveur : qui a lu et accepté quelle version."],
+    ],
+  },
+  {
+    id: "diffuser", t: "Diffuser", lead: "Des livrables prêts pour l'intranet, l'auditeur ou l'autorité.",
+    items: [
+      ["Exports", "PDF, Word, ODT et HTML statique pour l'intranet, générés sur place."],
+      ["Mention de protection", "Diffusion restreinte, etc., sur chaque page et chaque livrable."],
+      ["Mises à jour des référentiels", "Par paquets signés importés hors ligne, avec la liste des règles impactées."],
+    ],
+  },
+];
+
+const refs = [
+  ["Guides ANSSI (hygiène, PSSI, homologation)", "Texte des règles types embarqué", "En général sous Licence Ouverte Etalab : réutilisable avec mention de la source, à vérifier guide par guide."],
+  ["PSSIE", "Règles types pour les acteurs publics", "Texte public, citer la source."],
+  ["PGSSI-S", "Règles types pour la santé", "Texte public, citer la source."],
+  ["NIS 2 et sa transposition", "Exigences et correspondances", "Texte de loi, réutilisable."],
+  ["ISO 27001 / 27002", "Correspondances par numéro de mesure seulement", "Texte protégé par le droit d'auteur : il n'est pas embarqué ; l'utilisateur importe sa copie sous licence s'il en a une."],
+];
+
+const modes = [
+  ["Pour qui", "Consultant, RSSI seul, évaluation", "Équipe SSI, direction, utilisateurs qui signent les chartes"],
+  ["Installation", "Exécutable Windows ou Linux, sans base de données ni compte", "Linux natif, Docker Compose, Kubernetes"],
+  ["Données", "Restent sur le poste, chiffrées", "Base PostgreSQL chiffrée sur l'infrastructure de l'organisation"],
+  ["Collaboration", "Échange par export et import", "Rédaction simultanée, circuit de validation, accusés de lecture"],
+];
+---
+<Base title="Fonctionnalités" description="Les fonctionnalités de Vélin : démarrer, rédiger, tracer, valider, faire vivre et diffuser la PSSI, reliée aux risques de Beffroi, avec les référentiels ANSSI, PSSIE, PGSSI-S et NIS 2.">
+  <section class="page-head" style="padding-bottom:64px">
+    <div class="wrap">
+      <span class="eyebrow">Fonctionnalités · {SITE.status}</span>
+      <h1>Tout le cycle de vie de la PSSI</h1>
+      <p class="lead">
+        Six blocs, de la page blanche à la revue annuelle, reliés aux risques analysés dans Beffroi.
+        Cette page décrit le produit tel qu'il est conçu ; il n'est pas encore disponible.
+      </p>
+    </div>
+  </section>
+
+  <div class="wrap doc-layout">
+    <Toc items={toc} />
+
+    <div class="doc">
+      <section id="cycle">
+        <h2>Le cycle de vie d'une PSSI</h2>
+        <p>
+          Une politique de sécurité utile n'est pas un document qu'on écrit une fois : on la cadre, on la rédige,
+          on prouve ce qu'elle couvre, on la fait valider, on suit son application, on la revoit, et on la diffuse.
+          Vélin suit exactement ce cycle.
+        </p>
+
+        {features.map((f, i) => (
+          <div class="feature-block">
+            <h3 id={f.id}><span class="feature-n">{i + 1}</span>{f.t}</h3>
+            <p class="feature-lead">{f.lead}</p>
+            <dl class="feature-list">
+              {f.items.map(([t, d]) => (<div><dt>{t}</dt><dd>{d}</dd></div>))}
+            </dl>
+          </div>
+        ))}
+      </section>
+
+      <section id="beffroi">
+        <h2>Le lien avec Beffroi</h2>
+        <p>
+          <strong>Beffroi dit quels risques traiter ; Vélin écrit les règles qui les traitent.</strong> Chaque règle
+          de la PSSI est rattachée aux risques de l'analyse EBIOS Risk Manager conduite dans
+          <a href={SITE.beffroi} rel="noopener">Beffroi</a>. On sait ainsi quelle règle traite quel risque, quels
+          risques ne sont traités par aucune règle, et quelles règles revoir quand l'analyse évolue : la PSSI signale
+          alors les règles concernées au cycle de revue.
+        </p>
+        <div class="callout">
+          <p>
+            Les deux outils partagent la même pile technique (Node.js, PostgreSQL), pour mettre en commun
+            l'authentification, le chiffrement et les exports.
+          </p>
+        </div>
+      </section>
+
+      <section id="referentiels">
+        <h2>Référentiels et licences</h2>
+        <p>Le contenu embarqué doit pouvoir être redistribué librement ; tout ne l'est pas.</p>
+        <div class="table-scroll">
+          <table>
+            <thead><tr><th>Référentiel</th><th>Usage dans Vélin</th><th>Point d'attention</th></tr></thead>
+            <tbody>
+              {refs.map(([a, b, c]) => <tr><td><strong>{a}</strong></td><td>{b}</td><td>{c}</td></tr>)}
+            </tbody>
+          </table>
+        </div>
+        <div class="callout warn">
+          <p>
+            Comme Beffroi, Vélin n'est ni labellisé ni approuvé par l'ANSSI. Les marques citées appartiennent à
+            leurs titulaires.
+          </p>
+        </div>
+      </section>
+
+      <section id="securite">
+        <h2>Sécurité et déploiement</h2>
+        <p>Deux modes, au même niveau de sécurité, comme pour Beffroi.</p>
+        <div class="table-scroll">
+          <table>
+            <thead><tr><th></th><th>Poste seul</th><th>Serveur d'équipe</th></tr></thead>
+            <tbody>
+              {modes.map(([a, b, c]) => <tr><td><strong>{a}</strong></td><td>{b}</td><td>{c}</td></tr>)}
+            </tbody>
+          </table>
+        </div>
+        <h3>Socle commun</h3>
+        <ul>
+          <li>Second facteur TOTP par défaut, ou authentification unique OpenID Connect</li>
+          <li>Sessions révocables</li>
+          <li>Rôles : rédacteur, relecteur, approbateur, lecteur</li>
+          <li>Journal d'audit scellé, exportable vers un SIEM</li>
+          <li>Rotation de clé sans interruption ; documents et métadonnées chiffrés en AES-256-GCM</li>
+          <li>Aucune dépendance externe au chargement, aucune requête sortante</li>
+        </ul>
+      </section>
+    </div>
+  </div>
+</Base>

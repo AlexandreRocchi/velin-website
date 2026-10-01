@@ -1,0 +1,253 @@
+---
+import Base from "../layouts/Base.astro";
+import LogoMark from "../components/LogoMark.astro";
+import { SITE, url } from "../lib/site";
+
+const problems = [
+  { t: "Déconnectée des risques", d: "Les règles ne sont pas reliées à l'analyse de risques : personne ne sait quelle règle traite quel risque, ni ce qu'il faut revoir quand le contexte change." },
+  { t: "Générique", d: "Un modèle de 80 pages appliqué tel quel à une PME de 30 personnes est illisible et inapplicable." },
+  { t: "Figée", d: "Pas de revue planifiée, pas d'historique lisible, des dérogations accordées par courriel et jamais suivies." },
+  { t: "Invérifiable", d: "Impossible de prouver à un auditeur ou à l'autorité NIS 2 quelles exigences sont couvertes, qui a validé quoi et quand." },
+];
+
+const principles = [
+  { t: "Libre", d: "Licence Apache-2.0, code public, dossier de sécurité publié." },
+  { t: "Auto-hébergé", d: "Tourne sur le poste ou le serveur de l'organisation, installable sans Internet." },
+  { t: "Zéro requête sortante", d: "Ni télémétrie, ni CDN, ni police externe ; un test de bout en bout échoue à la moindre requête vers un autre hôte." },
+  { t: "Chiffré", d: "Documents et métadonnées en AES-256-GCM, avec une clé qui ne quitte pas l'infrastructure." },
+  { t: "Gratuit", d: "0 € pour toujours, comme Beffroi." },
+  { t: "Made in France", d: "Pensé d'après les guides de l'ANSSI et le contexte réglementaire français." },
+  { t: "Fidèle aux référentiels", d: "Les correspondances avec chaque référentiel sont documentées et vérifiables." },
+];
+
+const blocks = [
+  { id: "demarrer", t: "Démarrer", d: "Assistant de cadrage, bibliothèque de référentiels, reprise d'une PSSI Word ou ODT existante." },
+  { id: "rediger", t: "Rédiger", d: "Éditeur structuré, blocs réutilisables et variables, architecture documentaire, rédaction à plusieurs." },
+  { id: "tracer", t: "Tracer", d: "Matrice de couverture, déclaration d'applicabilité, lien de chaque règle avec les risques de Beffroi." },
+  { id: "valider", t: "Valider", d: "Circuit rédacteur, relecteurs, approbateur ; visa horodaté et versions x.y comparables." },
+  { id: "faire-vivre", t: "Faire vivre", d: "Suivi de mise en œuvre, registre des dérogations, cycle de revue, accusés de lecture des chartes." },
+  { id: "diffuser", t: "Diffuser", d: "Exports PDF, Word, ODT et HTML, mention de protection, mises à jour des référentiels hors ligne." },
+];
+
+const audiences = [
+  { t: "RSSI et équipes SSI", d: "Rédiger vite une PSSI adaptée, la tenir à jour, prouver la couverture des exigences." },
+  { t: "Collectivités et établissements publics", d: "Un outil souverain, gratuit, conforme à la doctrine de l'ANSSI." },
+  { t: "Entités essentielles et importantes NIS 2", d: "Démontrer leur conformité face à l'autorité de contrôle." },
+  { t: "PME et ETI sans RSSI à plein temps", d: "Être guidées pas à pas, sans jargon inutile." },
+  { t: "Établissements de santé", d: "S'appuyer sur la PGSSI-S." },
+  { t: "Consultants et auditeurs SSI", d: "Produire des PSSI pour plusieurs clients et réutiliser leurs blocs." },
+  { t: "Directions générales et DPO", d: "Relire, commenter et valider sans passer par des pièces jointes." },
+];
+---
+<Base>
+  <section class="hero">
+    <div class="hero-mark"><LogoMark size={520} inverted /></div>
+    <div class="wrap hero-grid">
+      <div>
+        <span class="status-pill">{SITE.status} · code bientôt public</span>
+        <h1>La politique de sécurité <em>qui suit vos risques</em>.</h1>
+        <p class="lead">
+          Vélin est une application libre et auto-hébergée pour rédiger, valider et faire vivre la
+          politique de sécurité des systèmes d'information (PSSI) d'une organisation, en équipe. Elle part
+          des référentiels publics (ANSSI, NIS 2) et relie chaque règle aux risques analysés dans Beffroi.
+        </p>
+        <ul class="hero-badges">
+          <li>Guides ANSSI, PSSIE, PGSSI-S, NIS 2</li>
+          <li>Aucune requête sortante</li>
+          <li>Licence Apache-2.0</li>
+        </ul>
+        <div class="btn-row">
+          <a class="btn btn-demo" href={url("fonctionnalites")}>Découvrir les fonctionnalités</a>
+          <a class="btn btn-ghost-light" href={SITE.beffroi} rel="noopener">Voir Beffroi</a>
+        </div>
+      </div>
+
+      <figure class="pssi-mock" aria-label="Illustration : une règle de PSSI reliée aux risques de Beffroi, sa couverture et son visa">
+        <div class="mock-head">
+          <span class="mock-ref">R-12</span>
+          <strong>Sauvegardes chiffrées hors ligne</strong>
+          <span class="mock-state ok">Appliquée</span>
+        </div>
+        <p class="mock-text">
+          Les données critiques de <span class="mock-var">{"{organisme}"}</span> sont sauvegardées chaque jour,
+          chiffrées, et une copie est conservée hors ligne. La restauration est testée chaque trimestre.
+        </p>
+        <div class="mock-row">
+          <span class="mock-label">Traite les risques</span>
+          <span class="mock-chip risk">R1 · Rançongiciel</span>
+          <span class="mock-chip risk">R4 · Sabotage</span>
+        </div>
+        <div class="mock-row">
+          <span class="mock-label">Couvre</span>
+          <span class="mock-chip">Hygiène ANSSI 37</span>
+          <span class="mock-chip">NIS 2 · art. 21 (2) c</span>
+          <span class="mock-chip">ISO 27002 8.13</span>
+        </div>
+        <div class="mock-foot">
+          <span>Version 2.1 · revue le 15/09/2027</span>
+          <span class="mock-seal"><LogoMark size={22} inverted /> Approuvée par la direction</span>
+        </div>
+        <figcaption>Illustration du principe, pas une capture : Vélin est en conception.</figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <section class="section quote-band">
+    <div class="wrap">
+      <blockquote class="name-quote">
+        <p>
+          Le vélin était le parchemin le plus fin, réservé aux actes officiels et aux textes qu'on voulait
+          faire durer. Une PSSI est exactement cela : le texte de référence, validé par la direction, qui fixe
+          les règles de toute l'organisation.
+        </p>
+        <footer>Pourquoi « Vélin » · un nom qui prolonge l'univers de Beffroi, dont la tour abritait justement les chartes de la ville.</footer>
+      </blockquote>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap">
+      <div class="section-head">
+        <span class="eyebrow">Le problème</span>
+        <h2>La PSSI qu'on rédige une fois, puis qu'on oublie</h2>
+        <p class="lead">
+          La plupart des PSSI sont écrites dans un traitement de texte, à partir d'un modèle trouvé en ligne,
+          puis rangées dans un dossier partagé. Cela pose quatre problèmes concrets.
+        </p>
+      </div>
+      <div class="problems">
+        {problems.map((p, i) => (
+          <article class="card problem"><span class="problem-n">{String(i + 1).padStart(2, "0")}</span><h3>{p.t}</h3><p>{p.d}</p></article>
+        ))}
+      </div>
+      <p class="muted" style="margin-top:20px;max-width:760px">
+        Les outils GRC qui règlent ces problèmes sont souvent des SaaS étrangers et coûteux, incompatibles avec
+        les contraintes d'un acteur public ou d'une entité sensible.
+      </p>
+    </div>
+  </section>
+
+  <section class="section section-alt" id="suite">
+    <div class="wrap">
+      <div class="section-head center">
+        <span class="eyebrow">Une même suite souveraine</span>
+        <h2>Beffroi dit quels risques traiter ; Vélin écrit les règles qui les traitent.</h2>
+        <p class="lead">Les deux outils forment la partie gouvernance d'une même suite, libre et auto-hébergée.</p>
+      </div>
+      <div class="suite">
+        <a class="suite-card beffroi" href={SITE.beffroi} rel="noopener">
+          <span class="suite-tag">Analyse de risques</span>
+          <strong>Beffroi</strong>
+          <span>Méthode EBIOS Risk Manager : sources de risque, scénarios, niveaux de risque, plan de traitement.</span>
+          <em>Disponible · voir le site →</em>
+        </a>
+        <div class="suite-link-arrow" aria-hidden="true">
+          <span>chaque règle</span>
+          <svg viewBox="0 0 120 24" width="120" height="24"><path d="M2 12h108" stroke="currentColor" stroke-width="2.5" stroke-dasharray="6 5" /><path d="M106 4l12 8-12 8" fill="none" stroke="currentColor" stroke-width="2.5" /></svg>
+          <span>traite des risques</span>
+        </div>
+        <div class="suite-card velin">
+          <span class="suite-tag">Politique de sécurité</span>
+          <strong>Vélin</strong>
+          <span>PSSI, politiques thématiques et chartes : rédigées, validées, appliquées et revues, avec la preuve de couverture.</span>
+          <em>En conception</em>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap">
+      <div class="section-head">
+        <span class="eyebrow">Principes</span>
+        <h2>L'ADN de Beffroi, sans compromis</h2>
+      </div>
+      <div class="principles">
+        {principles.map((p) => (
+          <div class="principle"><h3>{p.t}</h3><p>{p.d}</p></div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="section section-alt">
+    <div class="wrap">
+      <div class="section-head">
+        <span class="eyebrow">Fonctionnalités</span>
+        <h2>Six blocs, de la page blanche à la revue annuelle</h2>
+        <p class="lead">Ils suivent le cycle de vie d'une PSSI.</p>
+      </div>
+      <div class="blocks">
+        {blocks.map((b) => (
+          <a class="block" href={url(`fonctionnalites#${b.id}`)}><h3>{b.t}</h3><p>{b.d}</p><em>En savoir plus →</em></a>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap">
+      <div class="section-head">
+        <span class="eyebrow">Pour qui</span>
+        <h2>Pensé pour ceux qui écrivent, valident et appliquent la PSSI</h2>
+      </div>
+      <div class="audiences">
+        {audiences.map((a) => (
+          <div class="audience"><strong>{a.t}</strong><span>{a.d}</span></div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="section section-alt" id="deploiement">
+    <div class="wrap">
+      <div class="section-head">
+        <span class="eyebrow">Sécurité et déploiement</span>
+        <h2>Deux modes, au même niveau de sécurité</h2>
+        <p class="lead">Comme pour Beffroi : seul sur son poste, ou en équipe sur un serveur de l'organisation.</p>
+      </div>
+      <div class="install">
+        <div class="card">
+          <h3>Poste seul</h3>
+          <p><strong>Pour</strong> le consultant, le RSSI seul ou une évaluation.</p>
+          <ul>
+            <li>Exécutable Windows ou Linux, sans base de données ni compte</li>
+            <li>Données sur le poste, chiffrées</li>
+            <li>Échange par export et import</li>
+          </ul>
+        </div>
+        <div class="card">
+          <h3>Serveur d'équipe</h3>
+          <p><strong>Pour</strong> l'équipe SSI, la direction et les utilisateurs qui signent les chartes.</p>
+          <ul>
+            <li>Linux natif, Docker Compose, Kubernetes</li>
+            <li>Base PostgreSQL chiffrée sur l'infrastructure de l'organisation</li>
+            <li>Rédaction simultanée, circuit de validation, accusés de lecture</li>
+          </ul>
+        </div>
+      </div>
+      <p class="common-base">
+        <strong>Socle commun</strong> : second facteur TOTP par défaut ou SSO OpenID Connect, sessions révocables,
+        rôles (rédacteur, relecteur, approbateur, lecteur), journal d'audit scellé exportable vers un SIEM, rotation
+        de clé sans interruption, aucune dépendance externe au chargement. Côté technique, Vélin reprend la pile de
+        Beffroi (Node.js, PostgreSQL) pour partager l'authentification, le chiffrement et les exports entre les deux outils.
+      </p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap">
+      <div class="cta">
+        <h2>Vélin s'écrit en ce moment.</h2>
+        <p>
+          Le code sera publié sous licence Apache-2.0. En attendant, Beffroi est déjà disponible pour analyser vos
+          risques : ce sont eux que Vélin traitera.
+        </p>
+        <div class="btn-row">
+          <a class="btn btn-light" href={SITE.beffroi} rel="noopener">Découvrir Beffroi</a>
+          <a class="btn btn-ghost-light" href={url("blog")}>Suivre le projet sur le blog</a>
+        </div>
+      </div>
+    </div>
+  </section>
+</Base>

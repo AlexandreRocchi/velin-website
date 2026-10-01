@@ -1,0 +1,27 @@
+---
+/** Bloc de commandes avec bouton « Copier ». */
+interface Props { code: string; lang?: string; title?: string }
+const { code, lang = "bash", title } = Astro.props;
+---
+<div class="code">
+  <div class="code-bar">
+    <span>{title ?? lang}</span>
+    <button type="button" class="copy" data-copy aria-label="Copier les commandes">Copier</button>
+  </div>
+  <pre><code>{code.trim()}</code></pre>
+</div>
+
+<script>
+  document.querySelectorAll<HTMLButtonElement>("[data-copy]").forEach((b) =>
+    b.addEventListener("click", async () => {
+      const text = b.closest(".code")?.querySelector("code")?.textContent ?? "";
+      try {
+        await navigator.clipboard.writeText(text);
+        b.textContent = "Copié";
+      } catch {
+        b.textContent = "Échec";
+      }
+      setTimeout(() => (b.textContent = "Copier"), 1600);
+    }),
+  );
+</script>

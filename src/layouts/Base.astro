@@ -1,0 +1,117 @@
+---
+import "@fontsource/ibm-plex-sans/latin-400.css";
+import "@fontsource/ibm-plex-sans/latin-500.css";
+import "@fontsource/ibm-plex-sans/latin-600.css";
+import "@fontsource/ibm-plex-sans/latin-700.css";
+import "@fontsource/ibm-plex-sans/latin-400-italic.css";
+import "@fontsource/ibm-plex-serif/latin-500.css";
+import "@fontsource/ibm-plex-serif/latin-600.css";
+import "@fontsource/ibm-plex-mono/latin-400.css";
+import "../styles/global.css";
+import LogoMark from "../components/LogoMark.astro";
+import { SITE, url } from "../lib/site";
+
+interface Props { title?: string; description?: string; image?: string }
+const { title, description = SITE.description, image = "img/velin-partage.png" } = Astro.props;
+const fullTitle = title ? `${title} · ${SITE.name}` : `${SITE.name} · ${SITE.tagline}`;
+const path = Astro.url.pathname.replace(import.meta.env.BASE_URL.replace(/\/$/, ""), "") || "/";
+const nav = [
+  { href: "", label: "Produit", match: (p: string) => p === "/" },
+  { href: "fonctionnalites", label: "Fonctionnalités", match: (p: string) => p.startsWith("/fonctionnalites") },
+  { href: "tarifs", label: "Tarifs", match: (p: string) => p.startsWith("/tarifs") },
+  { href: "blog", label: "Blog", match: (p: string) => p.startsWith("/blog") },
+];
+const ogImage = new URL(url(image), Astro.site).href;
+---
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{fullTitle}</title>
+    <meta name="description" content={description} />
+    <meta name="theme-color" content="#6b1d2e" />
+    <link rel="icon" href={url("favicon.svg")} type="image/svg+xml" />
+    <link rel="alternate" type="application/rss+xml" title="Blog Vélin" href={url("rss.xml")} />
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content="fr_FR" />
+    <meta property="og:title" content={fullTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:image" content={ogImage} />
+    <meta name="twitter:card" content="summary_large_image" />
+  </head>
+  <body>
+    <a class="skip" href="#contenu">Aller au contenu</a>
+    <header class="site-header">
+      <div class="wrap header-inner">
+        <a class="brand" href={url()} aria-label="Vélin, accueil">
+          <LogoMark size={30} />
+          <span class="brand-name">Vélin</span>
+        </a>
+        <button type="button" class="menu-btn" aria-expanded="false" aria-controls="nav-principale" aria-label="Menu">
+          <span class="menu-ico" aria-hidden="true"></span> <span class="menu-txt">Menu</span>
+        </button>
+        <nav class="nav" id="nav-principale" aria-label="Navigation principale">
+          {nav.map((n) => (
+            <a href={url(n.href)} aria-current={n.match(path) ? "page" : undefined}>{n.label}</a>
+          ))}
+        </nav>
+        <a class="btn btn-sm btn-outline gh suite-link" href={SITE.beffroi} rel="noopener" title="Beffroi, l'analyse de risques de la même suite">
+          <span class="suite-dot" aria-hidden="true"></span> <span>Beffroi</span>
+        </a>
+      </div>
+    </header>
+
+    <main id="contenu">
+      <slot />
+    </main>
+
+    <footer class="site-footer">
+      <div class="wrap footer-grid">
+        <div>
+          <a class="brand inverted" href={url()}>
+            <LogoMark size={28} inverted />
+            <span class="brand-name">Vélin</span>
+          </a>
+          <p class="footer-note">
+            Logiciel libre sous licence Apache-2.0, produit français et auto-hébergé, actuellement en conception.
+            Vélin n'est ni labellisé ni approuvé par l'ANSSI ; les marques citées appartiennent à leurs titulaires.
+          </p>
+        </div>
+        <div>
+          <h2 class="footer-h">Produit</h2>
+          <ul>
+            <li><a href={url()}>Présentation</a></li>
+            <li><a href={url("fonctionnalites")}>Fonctionnalités</a></li>
+            <li><a href={url("fonctionnalites#referentiels")}>Référentiels</a></li>
+            <li><a href={url("tarifs")}>Tarifs</a></li>
+          </ul>
+        </div>
+        <div>
+          <h2 class="footer-h">La suite</h2>
+          <ul>
+            <li><a href={SITE.beffroi} rel="noopener">Beffroi, analyse de risques</a></li>
+            <li><a href={SITE.beffroiGithub} rel="noopener">Code de Beffroi</a></li>
+            <li><a href={url("blog")}>Blog</a></li>
+            <li><a href={url("rss.xml")}>Flux RSS</a></li>
+          </ul>
+        </div>
+        <div>
+          <h2 class="footer-h">Projet</h2>
+          <ul>
+            <li><a href={SITE.github} rel="noopener">GitHub</a></li>
+            <li><a href={url("mentions-legales")}>Mentions légales</a></li>
+          </ul>
+        </div>
+      </div>
+    </footer>
+    <script>
+      const btn = document.querySelector<HTMLButtonElement>(".menu-btn");
+      btn?.addEventListener("click", () => {
+        const open = btn.getAttribute("aria-expanded") !== "true";
+        btn.setAttribute("aria-expanded", String(open));
+        document.querySelector(".site-header")?.classList.toggle("menu-open", open);
+      });
+    </script>
+  </body>
+</html>

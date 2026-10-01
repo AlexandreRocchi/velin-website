@@ -1,0 +1,179 @@
+---
+import Base from "../layouts/Base.astro";
+import { SITE, url } from "../lib/site";
+
+const plans = [
+  {
+    name: "Feuillet",
+    for: "Pour le consultant ou le RSSI seul, sur son poste.",
+    cta: { label: "Voir les fonctionnalités", href: url("fonctionnalites") },
+    items: [
+      "Exécutable Windows ou Linux, mode poste seul",
+      "Assistant de cadrage et référentiels ANSSI",
+      "Exports PDF, Word, ODT et HTML",
+      "Données chiffrées sur le poste",
+    ],
+    jokes: ["Plume d'oie non fournie : prix inchangé"],
+  },
+  {
+    name: "Vélin",
+    ribbon: "Le plus choisi (et le seul prix)",
+    featured: true,
+    for: "Pour l'équipe SSI, la direction et les signataires des chartes.",
+    cta: { label: "Comment ça se déploie", href: url("fonctionnalites#securite") },
+    items: [
+      "Tout ce que propose l'offre Feuillet",
+      "Rédaction à plusieurs, circuit de validation",
+      "Accusés de lecture des chartes",
+      "MFA par défaut ou SSO OpenID Connect",
+      "Journal d'audit scellé, lien avec Beffroi",
+    ],
+    jokes: ["Garantie de hausse de prix : 0 % par an, à vie"],
+  },
+  {
+    name: "Grand sceau",
+    for: "Pour les organisations qui ne valident rien sans un acte en bonne et due forme.",
+    cta: { label: "Voir les référentiels", href: url("fonctionnalites#referentiels") },
+    items: [
+      "Tout ce que propose l'offre Vélin",
+      "Code source complet, à auditer à volonté",
+      "Paquets de référentiels signés, importés hors ligne",
+      "Déploiement Linux natif, Docker ou Kubernetes",
+    ],
+    jokes: ["Devis scellé à la cire sur demande, montant : 0 €"],
+  },
+];
+
+const compare = [
+  ["Licence", "0 €"],
+  ["Nombre de rédacteurs", "Illimité"],
+  ["Nombre de documents", "Illimité"],
+  ["Mise à jour des référentiels", "0 €"],
+  ["Parchemin, cire et ruban", "Fournis (virtuellement)"],
+  ["Hébergement", "Le vôtre, à vos frais"],
+  ["Temps passé en comité de validation", "Le vôtre, hélas"],
+];
+
+const faq = [
+  {
+    q: "C'est vraiment gratuit ? Même pour une entreprise ?",
+    a: "Oui. Vélin sera publié sous licence Apache-2.0, comme Beffroi : vous pourrez l'utiliser, le modifier et le déployer, y compris dans un cadre commercial, sans rien payer.",
+  },
+  {
+    q: "Quand pourra-t-on l'utiliser ?",
+    a: "Vélin est en conception. Le code sera publié sur GitHub dès qu'une première version sera utilisable ; le blog annoncera chaque étape. En attendant, Beffroi est disponible pour analyser vos risques.",
+  },
+  {
+    q: "Où est le piège ?",
+    a: "Il n'y en a pas, mais soyons honnêtes : le logiciel sera gratuit, pas la politique de sécurité. L'hébergement, la rédaction, la validation et l'application des règles restent à votre charge.",
+  },
+  {
+    q: "Le prix va-t-il augmenter ?",
+    a: "Nous nous engageons solennellement, et par écrit sur vélin, à ne jamais multiplier le prix par plus de mille.",
+  },
+  {
+    q: "Comment soutenir le projet ?",
+    a: "Une étoile sur Beffroi, un retour d'usage, une idée de règle type ou une relecture de la PSSI exemple quand elle sera publiée.",
+  },
+];
+---
+<Base title="Tarifs" description="Les tarifs de Vélin : gratuit à vie, sans engagement, sans piège. Logiciel libre sous licence Apache-2.0.">
+  <section class="page-head">
+    <div class="wrap">
+      <span class="eyebrow">Tarifs</span>
+      <h1>Gratuit. À vie. Sans astérisque*.</h1>
+      <p class="lead">Nous avons longuement étudié le marché pour fixer un prix juste. Nous sommes arrivés à zéro.</p>
+      <div class="billing" role="group" aria-label="Période de facturation">
+        <button type="button" data-period="mois" aria-pressed="true">Mensuel</button>
+        <button type="button" data-period="an" aria-pressed="false">Annuel</button>
+        <button type="button" data-period="vie" aria-pressed="false">À vie</button>
+      </div>
+      <span class="billing-note" id="billing-note" aria-live="polite">&nbsp;</span>
+    </div>
+  </section>
+
+  <section class="section" style="padding-top:0">
+    <div class="wrap">
+      <div class="plans">
+        {plans.map((p) => (
+          <article class:list={["plan", { featured: p.featured }]}>
+            {p.ribbon && <span class="ribbon">{p.ribbon}</span>}
+            <h2>{p.name}</h2>
+            <p class="for">{p.for}</p>
+            <div class="price"><strong>0&nbsp;€</strong><span data-period-label>/ mois</span></div>
+            <div class="price-strike" data-strike>&nbsp;</div>
+            <ul>
+              {p.items.map((i) => <li>{i}</li>)}
+              {p.jokes.map((j) => <li class="joke">{j}</li>)}
+            </ul>
+            <a class:list={["btn", { "btn-primary": p.featured }]} href={p.cta.href} rel="noopener">{p.cta.label}</a>
+          </article>
+        ))}
+      </div>
+      <p class="fine">* Il n'y a pas d'astérisque. Celui-ci est purement décoratif.</p>
+    </div>
+  </section>
+
+  <section class="section section-alt">
+    <div class="wrap">
+      <div class="section-head center">
+        <span class="eyebrow">Transparence</span>
+        <h2>Ce que vous paierez, ligne par ligne</h2>
+      </div>
+      <div class="table-scroll" style="max-width:780px;margin:0 auto">
+        <table class="compare">
+          <thead><tr><th scope="col">Poste</th><th scope="col">Coût</th></tr></thead>
+          <tbody>
+            {compare.map(([k, v]) => <tr><td>{k}</td><td><strong>{v}</strong></td></tr>)}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap">
+      <div class="section-head center">
+        <span class="eyebrow">Questions fréquentes</span>
+        <h2>Vous avez sûrement des doutes</h2>
+      </div>
+      <div class="faq">
+        {faq.map((f) => (
+          <details><summary>{f.q}</summary><p>{f.a}</p></details>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="section" style="padding-top:0">
+    <div class="wrap">
+      <div class="cta">
+        <h2>Payez en étoiles</h2>
+        <p>C'est notre seul moyen de paiement accepté. En attendant le dépôt de Vélin, celles de Beffroi comptent double.</p>
+        <div class="btn-row">
+          <a class="btn btn-light" href={SITE.beffroiGithub} rel="noopener">Une étoile pour Beffroi</a>
+          <a class="btn btn-ghost-light" href={url()}>Découvrir le produit</a>
+        </div>
+      </div>
+    </div>
+  </section>
+</Base>
+
+<script>
+  const notes: Record<string, { label: string; note: string; strike: string }> = {
+    mois: { label: "/ mois", note: "", strike: "" },
+    an: { label: "/ an", note: "Économisez 0 € par an en payant à l'année. Soit 0 % de remise. Une affaire.", strike: "au lieu de <s>0 €</s>" },
+    vie: { label: "pour toujours", note: "Notre meilleure offre : le même prix, mais dit avec plus de conviction.", strike: "soit 0 € / mois pendant l'éternité" },
+  };
+  const buttons = document.querySelectorAll<HTMLButtonElement>(".billing button");
+  const note = document.getElementById("billing-note")!;
+  buttons.forEach((b) =>
+    b.addEventListener("click", () => {
+      const n = notes[b.dataset.period!];
+      buttons.forEach((x) => x.setAttribute("aria-pressed", String(x === b)));
+      note.innerHTML = n.note || "&nbsp;";
+      document.querySelectorAll("[data-period-label]").forEach((el) => (el.textContent = n.label));
+      document.querySelectorAll("[data-strike]").forEach((el) => (el.innerHTML = n.strike || "&nbsp;"));
+    }),
+  );
+</script>
